@@ -74,16 +74,16 @@ class Employee():
     def __init__(self, department):
         self.department = department
         self.worker_name = get_correct_input("str", [],
-                                      "Введите имя сотрудника")
+                                      "Введите имя сотрудника: ")
         self.worker_phone = get_correct_input("str", [],
-                                      "Введите номер сотрудника")
+                                      "Введите номер сотрудника: ")
         self.worker_mail = get_correct_input("str", [],
-                                      "Введите почту сотрудника")
+                                      "Введите почту сотрудника: ")
         self.worker_age = get_correct_input("int", range(18, 99),
-                                      "Введите возраст сотрудника")
+                                      "Введите возраст сотрудника: ")
         self.worker_post = get_correct_input("str",
                                         self.__posts,
-                                      "Введите должность сотрудника")
+                                      "Введите должность сотрудника: ")
         print(department.add_employee(self))
 
     def get_info(self):
@@ -92,11 +92,12 @@ class Employee():
             \nДолжность: {self.worker_post},
             \nПочта: {self.worker_mail},
             \nНомер: {self.worker_phone},
-            \nВозраст: {self.worker_age},''')
+            \nВозраст: {self.worker_age}''')
 
     def delete(self, depart):
         """ delete worker """
         del depart.emp_base[self.worker_name]
+        depart.dep_emp_count = len(depart.emp_base)
 
 def get_correct_input(value_type = "str",
                        posbl_value = None, usr_str = "Введите значение"):
