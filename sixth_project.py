@@ -1,5 +1,13 @@
+""" sixth project, OP, SFU, 
+completed by Khodykin Alexander
+КИ23-17/2Б"""
+
 class Organization():
+    """ organization class
+    base class
+    contains: name, department base, documentation"""
     def __init__(self):
+        """ init the organization """
         self.dep_base = {}
         self.org_name = "ООО Пошла родимая"
         self.org_doc = '''Компания по разработке универсальных
@@ -13,18 +21,22 @@ class Organization():
             self.dep_base.update({department.dep_name: department})
             return "Добавление успешно"
         return "Такой отдел уже существует!"
-    
+
     def get_info(self):
-        print(f'''Название: {self.org_name}, 
+        """ returns all info about organiation """
+        print(f'''Название: {self.org_name},
             \rСпециализация: {self.org_doc},
             \rОтделы''')
         for i in self.dep_base:
             print(i, "\n")
-        return 0
 
 
 class Department():
+    """ department class
+    contains: workers base, department name, 
+    workers count and purpose"""
     def __init__(self, organization):
+        """ create new deparment and add it in organiation """
         self.emp_base = {}
         self.dep_name = get_correct_input("str", [],
                                       "Введите имя отдела ")
@@ -40,10 +52,10 @@ class Department():
             self.dep_emp_count = len(self.emp_base)
             return "Добавление успешно"
         return "Такой сотрудник уже существует!"
-    
+
     def get_info(self):
         """ returns info about department """
-        print(f'''Название: {self.dep_name}, 
+        print(f'''Название: {self.dep_name},
             \rСпециализация: {self.dep_purpose},
             \rКоличество сотрудников: {self.dep_emp_count},
             \rСотрудники''')
@@ -55,44 +67,48 @@ class Department():
         del organization.dep_base[self.dep_name]
 
 class Employee():
+    """ worker class 
+    contains: name, phone, mail, age, post"""
     __posts = ["Сис. администратор", "Менеджер", "Программист",
                "Директор", "Секретарь"]
     def __init__(self, department):
         self.department = department
         self.worker_name = get_correct_input("str", [],
-                                      "Введите имя сотрудника")
+                                      "Введите имя сотрудника: ")
         self.worker_phone = get_correct_input("str", [],
-                                      "Введите номер сотрудника")
+                                      "Введите номер сотрудника: ")
         self.worker_mail = get_correct_input("str", [],
-                                      "Введите почту сотрудника")
+                                      "Введите почту сотрудника: ")
         self.worker_age = get_correct_input("int", range(18, 99),
-                                      "Введите возраст сотрудника")
+                                      "Введите возраст сотрудника: ")
         self.worker_post = get_correct_input("str",
-                                        self.__posts, 
-                                      "Введите должность сотрудника")
+                                        self.__posts,
+                                      "Введите должность сотрудника: ")
         print(department.add_employee(self))
-    
+
     def get_info(self):
         """ returns info about worker """
-        print(f'''Имя: {self.worker_name}, 
+        print(f'''Имя: {self.worker_name},
             \nДолжность: {self.worker_post},
             \nПочта: {self.worker_mail},
             \nНомер: {self.worker_phone},
-            \nВозраст: {self.worker_age},''')
-        
+            \nВозраст: {self.worker_age}''')
+
     def delete(self, depart):
         """ delete worker """
-        del depart.emp_base[self.worker_name]    
+        del depart.emp_base[self.worker_name]
+        depart.dep_emp_count = len(depart.emp_base)
 
-def get_correct_input(type = "str", posbl_value = [], usr_str = "Введите значение"):
+def get_correct_input(value_type = "str",
+                       posbl_value = None, usr_str = "Введите значение"):
     """ returns correct input values (int or string)"""
     while True:
         inp_value = input(usr_str)
-        if type == "str" and \
-        (inp_value in posbl_value 
+        if value_type == "str" and \
+        (inp_value in posbl_value
          or posbl_value == []):
             return inp_value
-        if type == "int":
+        if value_type == "int":
             try:
                 int_inp_value = int(inp_value)
                 if int_inp_value in posbl_value:
@@ -102,6 +118,7 @@ def get_correct_input(type = "str", posbl_value = [], usr_str = "Введите 
         print("Неправильный ввод,\n Повторите попытку")
 
 def find_dep(organization):
+    """ find department in organization and return it """
     departs = organization.dep_base
     if len(departs) == 0:
         print("Отделов еще нет!")
@@ -111,16 +128,17 @@ def find_dep(organization):
     return departs[dep_name]
 
 def find_worker(organization):
+    """ find worker in some department and return it """
     depart = find_dep(organization)
-    if depart == 0: return 0 
+    if depart == 0:
+        return 0
     workers_names = depart.emp_base.keys()
-    if len(workers_names) == 0: 
+    if len(workers_names) == 0:
         print("Сотрудников еще нет!")
         return 0
-    worker_name = get_correct_input("str", workers_names, "Введите имя сотрудника ")
+    worker_name = get_correct_input("str",
+                                     workers_names, "Введите имя сотрудника ")
     return depart.emp_base[worker_name]
-    
-    
 
 def user_menu():
     """ returns a task number """
@@ -137,41 +155,38 @@ def user_menu():
         return get_correct_input("int", [1, 2, 3, 4, 5, 6, 7, 8],
                                 "Введите номер действия: ")
 
-
 def main():
-    """ the main method that does the main functions """
-    """ царская документация """
+    """ the main method that does the main functions 
+    царская документация """
     organization = Organization()
-    method = {
-            4 : Department,
-            6 : Employee,
-        }
-    is_running = True
-    while is_running:
+    while True:
         task = user_menu()
-        if task == 8:
-            break
-        if task == 1:
-            organization.get_info()
-        if task == 4:
-            Department(organization)
-        if task == 2: 
-            department = find_dep(organization)
-            if department != 0: department.get_info()
-        if task == 3:
-            worker = find_worker(organization)
-            if worker != 0: worker.get_info()
-        if task == 5:
-            department = find_dep(organization)
-            if department != 0: department.delete(organization)
-        if task == 6:
-            department = find_dep(organization)
-            Employee(department)
-        if task == 7:
-            worker = find_worker(organization)
-            if worker != 0: worker.delete(worker.department)
-
-    
+        match task:
+            case 8:
+                break
+            case 1:
+                organization.get_info()
+            case 4:
+                Department(organization)
+            case 2:
+                department = find_dep(organization)
+                if department != 0:
+                    department.get_info()
+            case 3:
+                worker = find_worker(organization)
+                if worker != 0:
+                    worker.get_info()
+            case 5:
+                department = find_dep(organization)
+                if department != 0:
+                    department.delete(organization)
+            case 6:
+                department = find_dep(organization)
+                Employee(department)
+            case 7:
+                worker = find_worker(organization)
+                if worker != 0:
+                    worker.delete(worker.department)
 
 if __name__ == "__main__":
     main()
