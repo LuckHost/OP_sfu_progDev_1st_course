@@ -1,5 +1,6 @@
 """ something like a backend of the App"""
 class Organization():
+    """ base class that contains all departments"""
     def __init__(self):
         self.dep_base = {}
         self.org_name = "ООО Пошла родимая"
@@ -14,9 +15,10 @@ class Organization():
             self.dep_base.update({department.dep_name: department})
             return "Добавление успешно"
         return "Такой отдел уже существует!"
-    
+
     def get_info(self):
-        output = f'''Название: {self.org_name}, 
+        """ returns information about organization """
+        output = f'''Название: {self.org_name},
             \rСпециализация: {self.org_doc},
             \rОтделы:'''
         for i in self.dep_base:
@@ -24,6 +26,8 @@ class Organization():
         return output
 
 class Department():
+    """ Deaprtment class contains employees
+    base and department info """
     def __init__(self, organization, name, purpose):
         self.emp_base = {}
         self.dep_name = str(name)
@@ -38,10 +42,10 @@ class Department():
             self.dep_emp_count = len(self.emp_base)
             return "Добавление успешно"
         return "Такой сотрудник уже существует!"
-    
+
     def get_info(self):
         """ returns info about department """
-        output = f'''Название: {self.dep_name}, 
+        output = f'''Название: {self.dep_name},
             \rСпециализация: {self.dep_purpose},
             \rКоличество сотрудников: {self.dep_emp_count},
             \rСотрудники: '''
@@ -54,6 +58,8 @@ class Department():
         del organization.dep_base[self.dep_name]
 
 class Employee():
+    """ Employee class contains info
+    about one employee """
     def __init__(self, department, name, post):
         self.department = department
         self.worker_name = name
@@ -62,10 +68,10 @@ class Employee():
 
     def get_info(self):
         """ returns info about worker """
-        return f'''Имя: {self.worker_name}, 
+        return f'''Имя: {self.worker_name},
             \nДолжность: {self.worker_post}'''
 
     def delete(self, depart):
         """ delete worker """
-        del depart.emp_base[self.worker_name]    
+        del depart.emp_base[self.worker_name]
         depart.dep_emp_count = len(depart.emp_base)

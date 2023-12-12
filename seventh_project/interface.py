@@ -1,19 +1,26 @@
 """ There is an interface, GUI of the App"""
 import tkinter
-from tkinter import END, W, E, Button, Label, Text, Tk
+from tkinter import END, W, E, Button, Scrollbar, Text, Tk
 import app_functions
 
 class App():
     """ User window class """
     def __init__(self, master):
         """ creating buttons and canvas """
-        self.program_output = Label(height=10, width=45,
-                                    text="Здесь будет информация")
-        self.program_output.grid(row=0, columnspan=1, sticky=W+E)
+        self.program_output = Text(height=10, width=45,
+                                    bg="#D9D8D7")
+        self.program_output.insert(1.0, "Здесь будет информация о программе")
+        self.program_output.grid(row=0, sticky=W+E, columnspan=3)
+        self.scroll = Scrollbar(command=self.program_output.yview)
+        self.scroll.grid(row=0, column=2, sticky=E)
+        self.program_output.config(yscrollcommand=self.scroll.set)
 
-        self.text_input = Text(height=2, width=5)
+        self.text_input = Text(height=2, width=15)
         self.text_input.grid(row=0, column=3, columnspan=2, sticky=W)
+        self.buttons_initilize(master)
 
+    def buttons_initilize(self, master):
+        """ initilize buttons on window """
         self.but = Button(master, text="Вывести информацию об\nорганизациии",
                           command=self.first_but).grid(column=0, row=2)
         self.but1 = Button(master, text="Вывести информацию\nоб отделе",
@@ -30,74 +37,73 @@ class App():
                            command=self.seventh_but).grid(column=3, row=2)
         self.but7 = Button(master, text="Выход",
                            command=self.eighth_but).grid(column=3, row=3)
-
+        self.but8 = Button(master, text="О программе",
+                           command=self.ninth_but).grid(column=2, row=4)
+        
     def output(self, output_str):
         """ sets some text on the label. """
-        self.program_output.config(text=output_str)
-        return
+        self.program_output.delete(1.0, END)
+        return self.program_output.insert(1.0, output_str)
 
     def first_but(self):
         """ gets info about an organization """
-        self.output(organization.get_info())
-        return
+        return self.output(organization.get_info())
 
     def second_but(self):
         """ gets info about an department """
         department = self.find_dep(organization)
         if department != 0:
-            self.output(department.get_info())
-            return
-        self.output("Отделов еще нет!")
-        return
+            return self.output(department.get_info())
+        return self.output("Отделов еще нет!")
 
     def third_but(self):
         """ gets info about some employee """
         depart = self.find_dep(organization)
         worker = self.find_worker(depart)
         if worker != 0:
-            self.output(worker.get_info())
-            return
-        self.output("Сотрудников еще нет!")
-        return
+            return self.output(worker.get_info())
+        return self.output("Сотрудников еще нет!")
 
     def fourth_but(self):
         """ add new department """
         name = self.get_correct_input("str", [], "Введите название отдела")
         purpose = self.get_correct_input("str", [], "Назначение?")
         app_functions.Department(organization, name, purpose)
-        self.output("Успешно!")
-        return
+        return self.output("Успешно!")
 
     def fifth_but(self):
         """ delete department from organization """
         department = self.find_dep(organization)
         department.delete(organization)
-        self.output("Успешно!")
-        return
+        return self.output("Успешно!")
 
     def sixth_but(self):
         """ find department and add new employee """
         department = self.find_dep(organization)
         if department == 0:
-            self.output("Сначала нужно создать отдел!")
-            return
+            return self.output("Сначала нужно создать отдел!")
         name = self.get_correct_input("str", [], "Введите имя")
         post = self.get_correct_input("str", [], "Пост сотрудника?")
         app_functions.Employee(department, name, post)
-        self.output("Успешно!")
-        return
+        return self.output("Успешно!")
 
     def seventh_but(self):
         """ delete employee from department """
         depart = self.find_dep(organization)
         worker = self.find_worker(depart)
         worker.delete(depart)
-        self.output("Успешно!")
-        return
+        return self.output("Успешно!")
 
     def eighth_but(self):
         """ exit function """
         quit()
+
+    def ninth_but(self):
+        """ retuns app info """
+        return self.output("""Программа написана Ходыкиным алксандром
+                           Группа: КИ23-17/2Б
+                           Программа предназначена для хранения
+                           данных об организации, ее отдела и сотрудниках""")
 
     def find_dep(self, organization):
         """ finds a department by user input """
