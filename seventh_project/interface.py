@@ -1,23 +1,18 @@
+""" There is an interface, GUI of the App"""
 import app_functions
 import tkinter
 
 from tkinter import *
-from tkinter import ttk
-
 
 class App():
     def __init__(self, master):
         """ creating buttons and canvas """
-        frm = ttk.Frame(master, padding =10)
-             
-        self.canvas = Canvas(width = 300, height = 300, bg = 'blue')
         self.program_output = Label(height=10, width=45, 
                                     text="Здесь будет информация")
         self.program_output.grid(row=0, columnspan=1, sticky=W+E)
         
         self.text_input = Text(height=2, width=5)
         self.text_input.grid(row=0, column=3, columnspan=2, sticky=W)
-
 
         self.but = Button(master, text="Вывести информацию об\nорганизациии", 
                           command=self.first_but).grid(column=0, row=2)
@@ -37,12 +32,15 @@ class App():
                            command=self.eighth_but).grid(column=3, row=3)
         
     def output(self, str):
+        """ sets some text on the label. """
         self.program_output.config(text=str)
         
     def first_but(self):
+        """ gets info about an organization """
         self.output(organization.get_info())
         
     def second_but(self):
+        """ gets info about an department """
         department = self.find_dep(organization)
         if department != 0: 
             self.output(department.get_info())
@@ -50,40 +48,50 @@ class App():
             self.output("Отделов еще нет!")
         
     def third_but(self):
-        worker = self.find_worker(organization)
+        """ gets info about some employee """
+        depart = self.find_dep(organization)
+        worker = self.find_worker(depart)
         if worker != 0: 
             self.output(worker.get_info())
         else: 
             self.output("Сотрудников еще нет!")
         
     def fourth_but(self):
+        """ add new department """
         name = self.get_correct_input("str", [], "Введите название отдела")
         purpose = self.get_correct_input("str", [], "Назначение?")
-        
         app_functions.Department(organization, name, purpose)
+        self.output("Успешно!")
         
     def fifth_but(self):
+        """ delete department from organization """
         department = self.find_dep(organization)
         department.delete(organization)
+        self.output("Успешно!")
         
     def sixth_but(self):
+        """ find department and add new employee """
         department = self.find_dep(organization)
         if department == 0:
             self.output("Сначала нужно создать отдел!")
         name = self.get_correct_input("str", [], "Введите имя")
-        post = self.get_correct_input("str", [], "Пост?")
-        print("1")
+        post = self.get_correct_input("str", [], "Пост сотрудника?")
         app_functions.Employee(department, name, post)
+        self.output("Успешно!")
         
     def seventh_but(self):
+        """ delete employee from department """
         depart = self.find_dep(organization)
-        worker = self.find_worker(organization)
+        worker = self.find_worker(depart)
         worker.delete(depart)
+        self.output("Успешно!")
         
     def eighth_but(self):
+        """ exit function """
         quit()
         
     def find_dep(self, organization):
+        """ finds a department by user input """
         departs = organization.dep_base
         if len(departs) == 0:
             return 0
@@ -92,8 +100,8 @@ class App():
                                 dep_names, "Введите название отдела ")
         return departs[dep_name]
     
-    def find_worker(self, organization):
-        depart = self.find_dep(organization)
+    def find_worker(self, depart):
+        """ finds an employee by user input """
         if depart == 0: 
             return 0 
         workers_names = depart.emp_base.keys()
@@ -128,7 +136,7 @@ class App():
             self.output("Неправильный ввод,\n Повторите попытку")
             
 def main():
-    """main function"""
+    """main function -  Royal documentation"""
     root = Tk()
     root.geometry("800x300")
     App(root)
