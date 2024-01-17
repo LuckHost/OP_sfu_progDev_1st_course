@@ -15,7 +15,7 @@ def menu_function():
     """ visual component """
     str_menu = "Введите номер действия:\n\
         0 - ввести массив и отсортировать его\n\
-        1 - выйти из программы"
+        1 - выйти из программы "
     inp = input(str_menu)
     try:
         return int(inp)

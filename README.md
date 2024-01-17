@@ -44,7 +44,53 @@ __Usage example:__
 ![](markdown_images/2nd_pr_output.png)
 
 ## Project 3
+__Task:__ Write a selection sort function. 
+
+__Input values:__ Array of numbers.
+__Export:__ Sorted array.
+
+__Description:__
+In this practical work the simplest sorting function was written. In addition, there are few menu and input check functions. 
+Sort function:
+```
+def selection_sort(arr):
+    """ sorts by choise """
+    arr_lenght = len(arr)
+    for i in range(arr_lenght):
+        min_index = i
+        for j in range(i+1, arr_lenght):
+            if arr[j] < arr[min_index]:
+                min_index = j
+        arr[i], arr[min_index] = arr[min_index], arr[i]
+    return arr
+```
+
+__Usage example:__
+![](markdown_images/3rd_pr_output.png)
+
+## Project 4
+__Task:__ 
+Write a programm that stores information about universities.
+Structure: Name, opening year, amount of faculties, number of students. 
+The program must let:
++ Download information from a file
++ Search for a university by name
++ Filter for a universities by the number of students
++ Add new universities
++ Delete universities
++ Save information in a file
+
+Use the _json_ module to complete the task.
+
+__Input values:__ The task number.
+__Export:__ The necessary information.
+
+__Description:__
+
+
+__Usage example:__
+
 ---
 #Проекты 1-го семестра
 
-Еще в разработке)
+Еще в разработке :D
